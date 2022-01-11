@@ -47,6 +47,7 @@ end
 M.selectw = M.select_window
 
 M.split_window = function (opts)
+  opts = opts or {}
   for key, value in pairs(opts) do
     if type(key) == 'number' then
       if value == 'h' then
@@ -66,6 +67,7 @@ end
 M.splitw = M.split_window
 
 M.select_pane = function (opts)
+  opts = opts or {}
   for key, value in pairs(opts) do
     if type(key) == 'number' then
       if value == 'L' then
@@ -91,5 +93,33 @@ M.select_pane = function (opts)
   return fn.nested(2)
 end
 M.selectp = M.select_pane
+
+M.resize_pane = function (opts)
+  opts = opts or {}
+  for key, value in pairs(opts) do
+    local expression = {}
+
+    local sign = '+'
+    if key == 'L' or key == 'R' or key == 'x' then
+      table.insert(expression, 'vertical')
+    end
+    if key == 'L' or key == 'D' then
+      sign = '-'
+    elseif key == 'x' or key == 'y' then
+      sign = ''
+    end
+
+    table.insert(expression, 'resize')
+    table.insert(expression, string.format('%s%d', sign, value))
+
+    local command = table.concat(expression, ' ')
+    return fn.nested(2, function ()
+      vim.cmd(command)
+    end)
+  end
+
+  return fn.nested(2)
+end
+M.resizep = M.resize_pane
 
 return M

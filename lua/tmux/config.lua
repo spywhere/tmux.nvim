@@ -18,4 +18,6 @@ return fn.nested(2, function ()
 
   vim.o.splitright = true
   vim.o.splitbelow = true
+
+  vim.o.mouse = 'a'
 end)
