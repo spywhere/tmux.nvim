@@ -9,6 +9,9 @@ This plugin provides a framework to turns
 The intention of this plugin is to eliminate the need of tmux for a basic
 terminal multiplexing feature by leveraging Neovim split and tab features
 
+For those who's on Windows, this could be a workaround for lack of tmux but
+only for terminal multiplexing
+
 ## Table Of Contents
 
 * [Installation](#installation)
