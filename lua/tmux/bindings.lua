@@ -25,4 +25,8 @@ return fn.nested(2, function (P, M)
   M.bind('<Right>', cmds.resize_pane({ R = 1 }), { 'r' })
   M.bind('<Up>', cmds.resize_pane({ U = 1 }), { 'r' })
   M.bind('<Down>', cmds.resize_pane({ D = 1 }), { 'r' })
+
+  -- copy mode (back to normal mode)
+  M.bind('[', cmds.copy_mode())
+  M.bind('q', cmds.cancel(), { T = 'copy-mode' })
 end)

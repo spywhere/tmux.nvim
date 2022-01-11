@@ -122,4 +122,21 @@ M.resize_pane = function (opts)
 end
 M.resizep = M.resize_pane
 
+M.copy_mode = function ()
+  return fn.nested(2, function ()
+    vim.cmd('stopinsert')
+  end)
+end
+
+M.cancel = function ()
+  return fn.nested(2, function ()
+    local mode = vim.fn.mode()
+    local vblock = vim.api.nvim_replace_termcodes('<C-v>', true, true, true)
+    if mode == 'v' or mode == 'V' or mode == vblock then
+      vim.api.nvim_feedkeys(mode, 'n', true)
+    end
+    vim.cmd('startinsert!')
+  end)
+end
+
 return M
