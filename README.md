@@ -32,9 +32,8 @@ git clone https://github.com/spywhere/tmux.nvim ~/.tmux.nvim
 or install using a plugin manager of your choice, for example:
 
 ```viml
-" neovim 0.5 or later which support lsp and lua
-Plug 'itchyny/lightline.vim'    " Dependency: status line
-Plug 'spywhere/lightline-lsp'
+" neovim 0.5 or later that supports lua
+Plug 'spywhere/tmux.nvim'
 ```
 
 ## Integration
