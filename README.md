@@ -42,6 +42,10 @@ Create a file named `init.lua` and place it somewhere
 (in this example, `~/.tmux.nvim/init.lua` will be used)
 
 ```lua
+-- if you're cloning the repository, you will need to add the plugin directory
+--   to the 'runtimepath'
+vim.opt.rtp:append('~/.tmux.nvim')
+
 local tmux = require('tmux')
 
 -- some configurations go here
