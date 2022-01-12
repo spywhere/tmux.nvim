@@ -35,7 +35,7 @@ return fn.nested(2, function (P, M)
   function on_terminal_close(event)
     P.last_status = event.status
 
-   on_window_close()
+    on_window_close()
   end
 
   registry.auto('TermClose', 'call ' .. registry.call_for_fn(on_terminal_close, 'v:event'))

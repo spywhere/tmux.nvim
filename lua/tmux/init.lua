@@ -2,11 +2,10 @@ local bindings = require('tmux.lib.bindings')
 
 local P = { -- private methods
   last_status = 0,
-  prefix = '<C-b>'
+  prefix = '<C-b>',
+  ready = {}
 }
 local M = {} -- public methods
-
-local _ready = {}
 
 P.setup = function ()
   M.on_ready(require('tmux.config')(P))
@@ -49,11 +48,11 @@ M.prefix = function (key)
 end
 
 M.on_ready = function (callback)
-  table.insert(_ready, callback)
+  table.insert(P.ready, callback)
 end
 
 M.start = function ()
-  for _, callback in ipairs(_ready) do
+  for _, callback in ipairs(P.ready) do
     callback(M)
   end
 
