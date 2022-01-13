@@ -122,6 +122,29 @@ M.resize_pane = function (opts)
 end
 M.resizep = M.resize_pane
 
+M.kill_pane = function (opts)
+  return fn.nested(2, function (P)
+    local wins = vim.api.nvim_list_wins()
+
+    local has_windows = false
+    for _, win in ipairs(wins) do
+      local buffer = vim.api.nvim_win_get_buf(win)
+      local buffer_type = vim.api.nvim_buf_get_option(buffer, 'buftype')
+      if buffer_type == 'terminal' then
+        has_windows = true
+        break
+      end
+    end
+
+    if has_windows then
+      vim.cmd('quit!')
+    else
+      vim.cmd('cquit! ' .. P.last.status)
+    end
+  end)
+end
+M.kill_p = M.kill_pane
+
 M.copy_mode = function ()
   return fn.nested(2, function ()
     vim.cmd('stopinsert')

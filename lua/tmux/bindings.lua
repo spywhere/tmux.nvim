@@ -7,6 +7,8 @@ return fn.nested(2, function (P, M)
   M.bind('%', cmds.split_window { 'v' } )
   M.bind('"', cmds.split_window { 'h' } )
 
+  M.bind('x', cmds.kill_pane {} )
+
   -- move between panes
   M.bind('<left>', cmds.select_pane { 'L' } )
   M.bind('<down>', cmds.select_pane { 'D' } )
