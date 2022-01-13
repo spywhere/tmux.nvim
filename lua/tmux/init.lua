@@ -2,7 +2,9 @@ local bindings = require('tmux.lib.bindings')
 local registry = require('tmux.lib.registry')
 
 local P = { -- private methods
-  last_status = 0,
+  last = {
+    status = 0
+  },
   prefix = '<C-b>',
   ready = {}
 }

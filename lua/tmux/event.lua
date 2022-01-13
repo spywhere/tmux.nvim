@@ -17,23 +17,24 @@ return fn.nested(2, function (P, M)
     vim.defer_fn(function ()
       local wins = vim.api.nvim_list_wins()
 
-      local count = 0
+      local has_windows = false
       for _, win in ipairs(wins) do
         local buffer = vim.api.nvim_win_get_buf(win)
         local buffer_type = vim.api.nvim_buf_get_option(buffer, 'buftype')
         if buffer_type == 'terminal' then
-          count = count + 1
+          has_windows = true
+          break
         end
       end
 
-      if count == 0 then
-        vim.cmd('cquit! ' .. P.last_status)
+      if not has_windows then
+        vim.cmd('cquit! ' .. P.last.status)
       end
     end, 10)
   end
 
   function on_terminal_close(event)
-    P.last_status = event.status
+    P.last.status = event.status
 
     on_window_close()
   end
