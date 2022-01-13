@@ -2,26 +2,112 @@ local fn = require('tmux.lib.fn')
 
 local M = {}
 
+M.next_layout = function ()
+  return fn.nested(2, function ()
+    vim.cmd('wincmd =')
+  end)
+end
+
 M.new_window = function ()
   return fn.nested(2, function ()
-    vim.cmd('terminal')
+    vim.cmd('tabnew +terminal')
   end)
 end
 M.neww = M.new_window
 
+M.rename_window = function (opts)
+  opts = opts or {}
+
+  local new_name = ''
+  for key, value in pairs(opts) do
+    if type(key) == 'number' then
+      new_name = value
+    end
+  end
+
+  return fn.nested(2, function (P)
+    if new_name == '' then
+      new_name = P.input('(rename window) ')
+    end
+    if new_name == '' then
+      return
+    end
+
+    vim.api.nvim_buf_set_var(0, 'term_title', new_name)
+  end)
+end
+M.renamew = M.rename_window
+
+M.rotate_window = function (opts)
+  opts = opts or {}
+
+  for key, value in pairs(opts) do
+    if type(key) == 'number' then
+      if value == 'U' then
+        return fn.nested(2, function ()
+          vim.cmd('wincmd R')
+        end)
+      end
+    end
+  end
+
+  return fn.nested(2, function ()
+    vim.cmd('wincmd r')
+  end)
+end
+
 M.previous_window = function ()
   return fn.nested(2, function ()
+    vim.cmd('tabprevious')
   end)
 end
 M.prev = M.pervious_window
 
 M.next_window = function ()
   return fn.nested(2, function ()
+    vim.cmd('tabnext')
   end)
 end
 M.next = M.next_window
 
 M.select_window = function (opts)
+  opts = opts or {}
+
+  if opts.t then
+    return fn.nested(2, function (P)
+      local target_window = opts.t + P.index_offset
+      if
+        0 < target_window and
+        target_window <= #vim.api.nvim_list_tabpages()
+      then
+        vim.cmd('tabnext ' .. target_window)
+      end
+    end)
+  end
+
+  for key, value in pairs(opts) do
+    if type(key) == 'number' then
+      if value == 'l' then
+        return fn.nested(2, function (P)
+          if
+            P.last.tabpage ~= nil and
+            P.last.tabpage <= #vim.api.nvim_list_tabpages()
+          then
+            vim.cmd('tabnext ' .. P.last.tabpage)
+          end
+        end)
+      elseif value == 'n' then
+        return fn.nested(2, function ()
+          vim.cmd('tabnext +1')
+        end)
+      elseif value == 'p' then
+        return fn.nested(2, function ()
+          vim.cmd('tabnext -1')
+        end)
+      end
+    end
+  end
+
   return fn.nested(2)
 end
 M.selectw = M.select_window
@@ -48,6 +134,7 @@ M.splitw = M.split_window
 
 M.kill_window = function ()
   return fn.nested(2, function ()
+    vim.cmd('tabclose!')
   end)
 end
 M.killw = M.kill_window

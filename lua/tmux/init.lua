@@ -3,12 +3,35 @@ local registry = require('tmux.lib.registry')
 
 local P = { -- private methods
   last = {
-    status = 0
+    status = 0,
+    tabpage = nil
   },
+  index_offset = 0,
+  refresh_interval = 5,
   prefix = '<C-b>',
   ready = {}
 }
 local M = {} -- public methods
+
+P.redraw = function (wait)
+  local delay = 0
+
+  if wait then
+    delay = P.refresh_interval * 1000
+  end
+
+  vim.defer_fn(function ()
+    vim.cmd('mode')
+  end, delay)
+end
+
+P.input = function (...)
+  vim.fn.inputsave()
+  local output = vim.fn.input(...)
+  vim.fn.inputrestore()
+  P.redraw()
+  return output
+end
 
 P.setup = function ()
   M.on_ready(require('tmux.config')(P))

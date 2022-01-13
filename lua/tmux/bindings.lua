@@ -4,10 +4,26 @@ local cmds = require('tmux.commands')
 return fn.nested(2, function (P, M)
   -- splits
   M.bind('c', cmds.new_window {} )
+  M.bind('n', cmds.next_window {} )
+  M.bind('p', cmds.previous_window {} )
   M.bind('%', cmds.split_window { 'v' } )
   M.bind('"', cmds.split_window { 'h' } )
+  M.bind('&', cmds.kill_window {} )
+  M.bind(',', cmds.rename_window {} )
+  M.bind('<space>', cmds.next_layout {} )
+  M.bind('<C-o>', cmds.rotate_window {} )
+  M.bind('<A-o>', cmds.rotate_window { 'U' } )
 
   M.bind('x', cmds.kill_pane {} )
+
+  -- move between windows
+  for idx = 1, 10 do
+    M.bind(
+      string.format('%s', idx - 1),
+      cmds.select_window { t = idx - 1 }
+    )
+  end
+  M.bind(';', cmds.select_window { 'l' } )
 
   -- move between panes
   M.bind('<left>', cmds.select_pane { 'L' } )
