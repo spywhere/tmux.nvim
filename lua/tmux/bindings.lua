@@ -28,5 +28,6 @@ return fn.nested(2, function (P, M)
 
   -- copy mode (back to normal mode)
   M.bind('[', cmds.copy_mode {} )
+  M.bind(']', cmds.paste_buffer {} )
   M.bind('q', cmds.cancel {}, { T = 'copy-mode' })
 end)

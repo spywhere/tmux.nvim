@@ -128,6 +128,12 @@ M.copy_mode = function ()
   end)
 end
 
+M.paste_buffer = function ()
+  return fn.nested(2, function ()
+    vim.cmd('put')
+  end)
+end
+
 M.cancel = function ()
   return fn.nested(2, function ()
     local mode = vim.fn.mode()
