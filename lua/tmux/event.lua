@@ -41,4 +41,9 @@ return fn.nested(2, function (P, M)
 
   registry.auto('TermClose', 'call ' .. registry.call_for_fn(on_terminal_close, 'v:event'))
   registry.auto('BufLeave', on_window_close)
+
+  function on_tab_leave()
+    P.last.tabpage = vim.api.nvim_tabpage_get_number(0)
+  end
+  registry.auto('TabLeave', on_tab_leave)
 end)
