@@ -1,4 +1,5 @@
 local bindings = require('tmux.lib.bindings')
+local registry = require('tmux.lib.registry')
 
 local P = { -- private methods
   last_status = 0,
@@ -51,12 +52,18 @@ M.on_ready = function (callback)
   table.insert(P.ready, callback)
 end
 
-M.start = function ()
+M.start = function (opts)
+  opts = opts or {}
+
   for _, callback in ipairs(P.ready) do
     callback(M)
   end
 
-  vim.cmd('terminal')
+  if opts.force or vim.v.vim_did_enter == 1 then
+    vim.cmd('terminal')
+  else
+    registry.auto('VimEnter', function () vim.cmd('terminal') end)
+  end
 end
 
 return P.setup()
