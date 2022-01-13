@@ -1,9 +1,13 @@
 local fn = require('tmux.lib.fn')
+local registry = require('tmux.lib.registry')
 
 return fn.nested(2, function ()
   -- no status line
   vim.o.laststatus = 0
-  vim.o.statusline = ' '
+
+  vim.o.statusline = '─'
+  vim.o.fillchars = 'stl:─,stlnc:─,eob: '
+
   -- no command line
   --   currently not possible
   --   ref: https://github.com/neovim/neovim/issues/1004
