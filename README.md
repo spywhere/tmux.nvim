@@ -14,27 +14,26 @@ only for terminal multiplexing
 
 ## Table Of Contents
 
-* [Installation](#installation)
+* [Features](#features)
 * [Integration](#integration)
 * [Configuration](#configuration)
+* [Installation](#installation)
 * [Contributes](#contributes)
 * [License](#license)
 
-## Installation
+## Features
 
-It is highly recommended to clone the repository (or download a zip file) and
-place it somewhere (`~/.tmux.nvim` would work too)
+This are non exhaustive list of features available
 
-```sh
-git clone https://github.com/spywhere/tmux.nvim ~/.tmux.nvim
-```
+- [x] Panes
+- [x] Windows
+- [x] Status bar<sup>1</sup>
+- [x] Copy mode<sup>1</sup>
+- [ ] (Detachable) Sessions<sup>2</sup>
 
-or install using a plugin manager of your choice, for example:
-
-```viml
-" neovim 0.5 or later that supports lua
-Plug 'spywhere/tmux.nvim'
-```
+1: Partially implemented  
+2: This requires Neovim to implement a server / client architecture which
+planned in 0.7
 
 ## Integration
 
@@ -66,11 +65,28 @@ As the plugin still under development, please find the default configurations
 from following locations...
 
 - Neovim configurations: `lua/tmux/config.lua`
+- Status bar (built using tabline): `lua/tmux/statusbar.lua`
 - Key bindings: `lua/tmux/bindings.lua`
 - Available commands: `lua/tmux/commands.lua`
 
 Please note that some options are opinionated and will be updated to match
 tmux's defaults later on
+
+## Installation
+
+It is highly recommended to clone the repository (or download a zip file) and
+place it somewhere (`~/.tmux.nvim` would work too)
+
+```sh
+git clone https://github.com/spywhere/tmux.nvim ~/.tmux.nvim
+```
+
+or install using a plugin manager of your choice, for example:
+
+```viml
+" neovim 0.5 or later that supports lua
+Plug 'spywhere/tmux.nvim'
+```
 
 ## Contributes
 
