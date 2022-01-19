@@ -35,6 +35,7 @@ end
 
 P.setup = function ()
   M.on_ready(require('tmux.config')(P))
+  M.on_ready(require('tmux.statusbar')(P))
   M.on_ready(require('tmux.bindings')(P))
   M.on_ready(require('tmux.event')(P))
   return M
