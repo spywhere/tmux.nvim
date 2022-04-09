@@ -49,5 +49,10 @@ return fn.nested(2, function (P)
 
     return line
   end
-  vim.o.tabline = string.format('%%!%s', registry.call_for_fn(tabline))
+
+  if P.status.position == 'top' then
+    vim.o.tabline = string.format('%%!%s', registry.call_for_fn(tabline))
+  else
+    vim.o.statusline = string.format('%%!%s', registry.call_for_fn(tabline))
+  end
 end)

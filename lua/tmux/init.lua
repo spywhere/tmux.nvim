@@ -6,6 +6,9 @@ local P = { -- private methods
     status = 0,
     tabpage = nil
   },
+  status = {
+    position = 'top'
+  },
   index_offset = 0,
   refresh_interval = 5,
   prefix = '<C-b>',
