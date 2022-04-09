@@ -212,20 +212,27 @@ M.resizep = M.resize_pane
 
 M.kill_pane = function (opts)
   return fn.nested(2, function (P)
-    local wins = vim.api.nvim_list_wins()
-
+    local has_tabs = vim.fn.tabpagenr('$') > 1
     local has_windows = false
+
+    local current_buffer = vim.api.nvim_get_current_buf()
+    local wins = vim.api.nvim_list_wins()
     for _, win in ipairs(wins) do
       local buffer = vim.api.nvim_win_get_buf(win)
       local buffer_type = vim.api.nvim_buf_get_option(buffer, 'buftype')
-      if buffer_type == 'terminal' then
+      if current_buffer ~= buffer and buffer_type == 'terminal' then
         has_windows = true
         break
       end
     end
 
     if has_windows then
+      vim.cmd([[exe 'bdelete! '..expand('<abuf>')]])
+    elseif has_tabs then
       vim.cmd('quit!')
+    elseif P.last.status == -1 then
+      -- terminal is killed
+      vim.cmd('cquit! 1')
     else
       vim.cmd('cquit! ' .. P.last.status)
     end
