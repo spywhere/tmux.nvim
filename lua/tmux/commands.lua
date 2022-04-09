@@ -155,6 +155,13 @@ end
 
 M.select_pane = function (opts)
   opts = opts or {}
+
+  if opts.t == ':.+' then
+    return fn.nested(2, function ()
+      vim.cmd('wincmd w')
+    end)
+  end
+
   for key, value in pairs(opts) do
     if type(key) == 'number' then
       if value == 'L' then

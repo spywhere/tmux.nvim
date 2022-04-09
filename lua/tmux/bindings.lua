@@ -31,6 +31,7 @@ return fn.nested(2, function (P, M)
   M.bind('<down>', cmds.select_pane { 'D' } )
   M.bind('<up>', cmds.select_pane { 'U' } )
   M.bind('<right>', cmds.select_pane { 'R' } )
+  M.bind('o', cmds.select_pane { t = ':.+' } )
 
   -- resize
   M.bind('<A-left>', cmds.resize_pane { L = 8 }, { 'r' })
