@@ -11,7 +11,11 @@ return fn.nested(2, function (P, M)
   M.bind('"', cmds.split_window { 'h' } )
   M.bind('&', cmds.kill_window {} )
   M.bind(',', cmds.command_prompt {
-    I = function () return vim.fn.fnamemodify(vim.api.nvim_buf_get_var(0, 'term_title'), ':t') end,
+    I = function ()
+      return vim.fn.fnamemodify(
+        vim.api.nvim_buf_get_var(0, 'term_title'), ':t'
+      )
+    end,
     p = '(rename window) ',
     cmds.rename_window
   })
@@ -30,7 +34,9 @@ return fn.nested(2, function (P, M)
 
   -- pane management
   M.bind('x', cmds.confirm_before {
-    p = function () return string.format('kill pane %s? (y/n)', vim.fn.winnr()) end,
+    p = function ()
+      return string.format('kill pane %s? (y/n)', vim.fn.winnr())
+    end,
     cmds.kill_pane {}
   })
   M.bind('{', cmds.swap_pane { 'U' } )
