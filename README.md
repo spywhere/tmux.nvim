@@ -15,9 +15,10 @@ only for terminal multiplexing
 ## Table Of Contents
 
 * [Features](#features)
-* [Integration](#integration)
+* [Getting Started](#getting-started)
 * [Configurations](#configurations)
 * [Installation](#installation)
+* [Integration](#integration)
 * [Contributes](#contributes)
 * [License](#license)
 
@@ -35,29 +36,17 @@ This are non exhaustive list of features available
 2: This requires Neovim to implement a server / client architecture which
 planned in 0.7
 
-## Integration
+## Getting Started
 
-Create a file named `init.lua` and place it somewhere
-(in this example, `~/.tmux.nvim/init.lua` will be used)
-
-```lua
--- if you're cloning the repository, you will need to add the plugin directory
---   to the 'runtimepath'
-vim.opt.rtp:append('~/.tmux.nvim')
-
-local tmux = require('tmux')
-
--- some configurations go here
-
-tmux.start() -- this will start a terminal session
-
-```
-
-then, when you're ready to use Neovim as terminal multiplexer, just run
+To quickly setup and run the first session of tmux.nvim
 
 ```sh
+curl -fLo ~/.tmux.nvim/init.lua --create-dirs https://raw.githubusercontent.com/spywhere/tmux.nvim/main/tests/git.lua
 nvim -u ~/.tmux.nvim/init.lua
 ```
+
+This will download a basic configuration to `~/.tmux.nvim/init.lua` and run it.
+In which, it will automatically install and setup the plugin using vim-plug.
 
 ## Configurations
 
@@ -88,11 +77,28 @@ or install using a plugin manager of your choice, for example:
 Plug 'spywhere/tmux.nvim'
 ```
 
-Alternatively, you could also use the following command to download a basic
-configuration (including vim-plug with auto-install, auto-update)
+## Integration
+
+Create a file named `init.lua` and place it somewhere
+(in this example, `~/.tmux.nvim/init.lua` will be used)
+
+```lua
+-- if you're cloning the repository, you will need to add the plugin directory
+--   to the 'runtimepath'
+vim.opt.rtp:append('~/.tmux.nvim')
+
+local tmux = require('tmux')
+
+-- some configurations go here
+
+tmux.start() -- this will start a terminal session
+
+```
+
+then, when you're ready to use Neovim as terminal multiplexer, just run
 
 ```sh
-curl -fLo ~/.tmux.nvim/init.lua --create-dirs https://raw.githubusercontent.com/spywhere/tmux.nvim/main/tests/git.lua
+nvim -u ~/.tmux.nvim/init.lua
 ```
 
 ## Contributes
