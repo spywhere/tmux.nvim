@@ -9,6 +9,10 @@ local P = { -- private methods
   status = {
     position = 'top'
   },
+  mark = {
+    tabpage = nil,
+    win = nil
+  },
   index_offset = 0,
   refresh_interval = 5,
   prefix = '<C-b>',

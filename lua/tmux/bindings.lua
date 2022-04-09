@@ -15,8 +15,6 @@ return fn.nested(2, function (P, M)
   M.bind('<C-o>', cmds.rotate_window {} )
   M.bind('<A-o>', cmds.rotate_window { 'U' } )
 
-  M.bind('x', cmds.kill_pane {} )
-
   -- move between windows
   for idx = 1, 10 do
     M.bind(
@@ -25,6 +23,11 @@ return fn.nested(2, function (P, M)
     )
   end
   M.bind(';', cmds.select_window { 'l' } )
+
+  -- pane management
+  M.bind('x', cmds.kill_pane {} )
+  M.bind('{', cmds.swap_pane { 'U' } )
+  M.bind('}', cmds.swap_pane { 'D' } )
 
   -- move between panes
   M.bind('<left>', cmds.select_pane { 'L' } )
