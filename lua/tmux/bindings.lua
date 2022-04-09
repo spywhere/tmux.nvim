@@ -2,6 +2,7 @@ local fn = require('tmux.lib.fn')
 local cmds = require('tmux.commands')
 
 return fn.nested(2, function (P, M)
+  M.bind(P.prefix, cmds.send_prefix {} )
   -- splits
   M.bind('c', cmds.new_window {} )
   M.bind('n', cmds.next_window {} )

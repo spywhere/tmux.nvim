@@ -148,7 +148,8 @@ end
 
 M.send_prefix = function ()
   return fn.nested(2, function (P)
-    vim.api.nvim_feedkeys(P.prefix, 't', true)
+    local prefix = vim.api.nvim_replace_termcodes(P.prefix, true, true, true)
+    vim.api.nvim_feedkeys(prefix, 't', true)
   end)
 end
 
