@@ -1,5 +1,5 @@
 vim_plug_url = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-plugin_home = vim.fn.stdpath('cache') .. '/plugged'
+plugin_home = vim.fn.stdpath('cache') .. '/tmux.nvim'
 vim_plug = plugin_home .. '/plug.vim'
 
 if vim.fn.filereadable(vim_plug) ~= 0 then
