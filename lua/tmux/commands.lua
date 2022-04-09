@@ -407,6 +407,7 @@ M.cancel = function ()
     if mode == 'v' or mode == 'V' or mode == vblock then
       vim.api.nvim_feedkeys(mode, 'n', true)
     end
+    vim.cmd('nohlsearch')
     vim.cmd('startinsert!')
   end)
 end

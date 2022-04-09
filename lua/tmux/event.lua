@@ -12,8 +12,22 @@ return fn.nested(2, function (P, M)
     end, 10)
   end
 
-  registry.auto({ 'BufEnter', 'CmdlineLeave' }, start_insert)
+  function on_cmdline_leave(event)
+    if event.cmdtype == ':' then
+      start_insert()
+    end
+  end
+
+  registry.auto('BufEnter', start_insert)
+  registry.auto('CmdlineLeave', 'call ' .. registry.call_for_fn(on_cmdline_leave, 'v:event'))
   registry.auto('TermOpen', 'startinsert!')
+  registry.auto({ 'InsertEnter', 'TermEnter' }, function ()
+    vim.defer_fn(function ()
+      if vim.bo.buftype == 'terminal' then
+        vim.cmd('nohlsearch')
+      end
+    end, 10)
+  end)
 
   function on_terminal_close(event)
     P.last.status = event.status
