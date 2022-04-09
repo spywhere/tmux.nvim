@@ -1,2 +1,2 @@
 testrun:
-	nvim -u tests/init.lua
+	@nvim -u tests/init.lua
