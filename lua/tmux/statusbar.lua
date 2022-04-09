@@ -41,7 +41,7 @@ return fn.nested(2, function (P)
       )
     end
 
-    local hostname = vim.trim(vim.fn.system('hostname'))
+    local hostname = vim.trim(vim.fn.hostname())
     local datetime = os.date('%H:%M %d-%b-%y')
 
     -- right
