@@ -27,9 +27,6 @@ M.rename_window = function (opts)
 
   return fn.nested(2, function (P)
     if new_name == '' then
-      new_name = P.input('(rename window) ')
-    end
-    if new_name == '' then
       return
     end
 
@@ -139,11 +136,52 @@ M.kill_window = function ()
 end
 M.killw = M.kill_window
 
-M.command_prompt = function ()
-  return fn.nested(2, function ()
-    vim.cmd('stopinsert')
-    vim.api.nvim_feedkeys(':', 'n', true)
-  end)
+M.command_prompt = function (opts)
+  opts = opts or {}
+
+  local cb = nil
+  local placeholders = {}
+  local prompts = { '' }
+
+  if type(opts.I) == 'table' then
+    placeholders = opts.I
+  elseif opts.I ~= nil then
+    placeholders = { opts.I }
+  end
+  if type(opts.p) == 'table' then
+    prompts = opts.p
+  elseif opts.p ~= nil then
+    prompts = { opts.p }
+  end
+
+  for key, value in pairs(opts) do
+    if type(key) == 'number' then
+      if type(value) == 'function' then
+        cb = value
+      end
+    end
+  end
+
+  if cb then
+    return fn.nested(2, function (P, M)
+      for index, prompt in ipairs(prompts) do
+        local prompt_text = prompt or ''
+        local placeholder_text = placeholders[index] or ''
+        if type(prompt_text) == 'function' then
+          prompt_text = prompt_text()
+        end
+        if type(placeholder_text) == 'function' then
+          placeholder_text = placeholder_text()
+        end
+        cb(P.input(prompt_text, placeholder_text))(P)(M)
+      end
+    end)
+  else
+    return fn.nested(2, function ()
+      vim.cmd('stopinsert')
+      vim.api.nvim_feedkeys(':', 'n', true)
+    end)
+  end
 end
 
 M.send_prefix = function ()

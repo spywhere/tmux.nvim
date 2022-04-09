@@ -10,7 +10,11 @@ return fn.nested(2, function (P, M)
   M.bind('%', cmds.split_window { 'v' } )
   M.bind('"', cmds.split_window { 'h' } )
   M.bind('&', cmds.kill_window {} )
-  M.bind(',', cmds.rename_window {} )
+  M.bind(',', cmds.command_prompt {
+    I = function () return vim.fn.fnamemodify(vim.api.nvim_buf_get_var(0, 'term_title'), ':t') end,
+    p = '(rename window) ',
+    function (input) return cmds.rename_window { input } end
+  })
   M.bind('<space>', cmds.next_layout {} )
   M.bind('<C-o>', cmds.rotate_window {} )
   M.bind('<A-o>', cmds.rotate_window { 'U' } )
