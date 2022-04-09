@@ -164,6 +164,7 @@ M.command_prompt = function (opts)
 
   if cb then
     return fn.nested(2, function (P, M)
+      local outputs = {}
       for index, prompt in ipairs(prompts) do
         local prompt_text = prompt or ''
         local placeholder_text = placeholders[index] or ''
@@ -173,8 +174,9 @@ M.command_prompt = function (opts)
         if type(placeholder_text) == 'function' then
           placeholder_text = placeholder_text()
         end
-        cb(P.input(prompt_text, placeholder_text))(P)(M)
+        table.insert(outputs, P.input(prompt_text, placeholder_text))
       end
+      cb(outputs)(P)(M)
     end)
   else
     return fn.nested(2, function ()
