@@ -88,6 +88,13 @@ or install using a plugin manager of your choice, for example:
 Plug 'spywhere/tmux.nvim'
 ```
 
+Alternatively, you could also use the following command to download a basic
+configuration (including vim-plug with auto-install, auto-update)
+
+```sh
+curl -fLo ~/.tmux.nvim/init.lua --create-dirs https://raw.githubusercontent.com/spywhere/tmux.nvim/main/tests/git.lua
+```
+
 ## Contributes
 
 During the development, you can use the following command to automatically setup
