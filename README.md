@@ -16,7 +16,7 @@ only for terminal multiplexing
 
 * [Features](#features)
 * [Integration](#integration)
-* [Configuration](#configuration)
+* [Configurations](#configurations)
 * [Installation](#installation)
 * [Contributes](#contributes)
 * [License](#license)
@@ -59,7 +59,7 @@ then, when you're ready to use Neovim as terminal multiplexer, just run
 nvim -u ~/.tmux.nvim/init.lua
 ```
 
-## Configuration
+## Configurations
 
 As the plugin still under development, please find the default configurations
 from following locations...
@@ -101,6 +101,18 @@ or
 
 ```
 nvim -u tests/init.lua
+```
+
+Alternatively, if you wish to test the plugin through direct cloning, use...
+
+```
+make testrun-from-git
+```
+
+or
+
+```
+nvim -u tests/git.lua
 ```
 
 ## License
