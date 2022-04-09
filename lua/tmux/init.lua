@@ -40,6 +40,14 @@ P.input = function (...)
   return output
 end
 
+P.confirm = function (...)
+  vim.fn.inputsave()
+  local output = vim.fn.confirm(...)
+  vim.fn.inputrestore()
+  P.redraw()
+  return output
+end
+
 P.setup = function ()
   M.on_ready(require('tmux.config')(P))
   M.on_ready(require('tmux.statusbar')(P))

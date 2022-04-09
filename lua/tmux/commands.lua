@@ -136,6 +136,36 @@ M.kill_window = function ()
 end
 M.killw = M.kill_window
 
+M.confirm_before = function (opts)
+  opts = opts or {}
+
+  local cb = nil
+  local prompt = opts.p or 'input: '
+
+  for key, value in pairs(opts) do
+    if type(key) == 'number' then
+      if type(value) == 'function' then
+        cb = value
+      end
+    end
+  end
+
+  if cb then
+    return fn.nested(2, function (P, M)
+      local prompt_text = prompt
+      if type(prompt_text) == 'function' then
+        prompt_text = prompt_text()
+      end
+      if P.confirm(prompt_text, '&y\n&n', 2) == 1 then
+        cb(P)(M)
+      end
+    end)
+  end
+
+  return fn.nested(2)
+end
+M.confirm = M.confirm_before
+
 M.command_prompt = function (opts)
   opts = opts or {}
 
