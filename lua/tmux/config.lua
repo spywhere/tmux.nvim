@@ -1,7 +1,15 @@
 local fn = require('tmux.lib.fn')
 
 return fn.nested(2, function (P)
-  if P.status.position == 'top' then
+  -- bottom status only support in neovim 0.7 (using unified status line)
+  if P.status.position == 'bottom' and vim.fn.has('nvim-0.7') == 1 then
+    -- always show status line
+    vim.o.laststatus = 3
+    -- no tab line
+    vim.o.showtabline = 0
+
+    vim.o.fillchars = 'stl: ,stlnc: '
+  else
     -- no status line
     vim.o.laststatus = 0
     -- always show tab line
@@ -9,17 +17,6 @@ return fn.nested(2, function (P)
 
     vim.o.fillchars = 'stl:─,stlnc:─'
     vim.o.statusline = '─'
-  else
-    -- always show status line
-    if vim.fn.has('nvim-0.7') == 1 then
-      vim.o.laststatus = 3
-    else
-      vim.o.laststatus = 2
-    end
-    -- no tab line
-    vim.o.showtabline = 0
-
-    vim.o.fillchars = 'stl: ,stlnc: '
   end
 
   vim.opt.fillchars:append('eob: ')
