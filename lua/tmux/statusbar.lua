@@ -7,7 +7,12 @@ return fn.nested(2, function (P)
     local winid = vim.fn.tabpagewinnr(tid)
     local bufid = buffers[winid]
 
-    if vim.fn.exists('b:term_title') == 0 then
+    local has_title = function (bid)
+      return pcall(function ()
+        return vim.api.nvim_buf_get_var(bid, 'term_title')
+      end)
+    end
+    if not has_title(bufid) then
       return ''
     end
 
@@ -24,12 +29,21 @@ return fn.nested(2, function (P)
     -- mid
     for i = 1, vim.fn.tabpagenr('$') do
       local name = tabname(i)
-      local flag = ' '
+      local flags = ' '
 
       if i == vim.fn.tabpagenr() then
-        flag = '*'
+        flags = '*'
       elseif i == P.last.tabpage then
-        flag = '-'
+        flags = '-'
+      end
+
+      local is_zoom = function (tid)
+        return pcall(function ()
+          return vim.api.nvim_tabpage_get_var(tid, 'tmux_pane_zoom')
+        end)
+      end
+      if is_zoom(i) then
+        flags = string.format('%sZ', flags)
       end
 
       line = string.format(
@@ -37,7 +51,7 @@ return fn.nested(2, function (P)
         line,
         i - P.index_offset,
         name,
-        flag
+        flags
       )
     end
 
