@@ -258,7 +258,7 @@ M.select_pane = function (opts)
 end
 M.selectp = M.select_pane
 
-local function swap_pane(opts)
+M.swap_pane = function (opts)
   opts = opts or {}
 
   local source = function ()
@@ -326,7 +326,6 @@ local function swap_pane(opts)
     end
   end)
 end
-M.swap_pane = swap_pane
 M.swapp = swap_pane
 
 M.resize_pane = function (opts)
