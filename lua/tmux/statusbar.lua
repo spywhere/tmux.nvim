@@ -42,6 +42,9 @@ return fn.nested(2, function (P)
           return vim.api.nvim_tabpage_get_var(tid, 'tmux_pane_zoom')
         end)
       end
+      if i == P.mark.tabpage then
+        flags = string.format('%sM', flags)
+      end
       if is_zoom(i) then
         flags = string.format('%sZ', flags)
       end

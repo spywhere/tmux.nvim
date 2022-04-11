@@ -284,6 +284,8 @@ M.swap_pane = function (opts)
     elseif P.mark.win == nil then
       return vim.fn.winnr()
     else
+      -- TODO: this mark win-ID is incomplete, it need to combine with tab-ID
+      --   to refer to a specific window (pane) in a specific tabpage (window)
       return P.mark.win
     end
   end
