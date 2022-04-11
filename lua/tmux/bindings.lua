@@ -58,6 +58,7 @@ return fn.nested(2, function (P, M)
   M.bind('<C-right>', cmds.resize_pane { R = 1 }, { 'r' })
   M.bind('<C-up>', cmds.resize_pane { U = 1 }, { 'r' })
   M.bind('<C-down>', cmds.resize_pane { D = 1 }, { 'r' })
+  M.bind('z', cmds.resize_pane { 'Z' })
 
   -- command prompt
   M.bind(':', cmds.command_prompt {} )

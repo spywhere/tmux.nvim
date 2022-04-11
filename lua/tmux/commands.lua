@@ -2,8 +2,16 @@ local fn = require('tmux.lib.fn')
 
 local M = {}
 
+local function restore_zoom()
+  if vim.fn.exists('t:tmux_pane_zoom') == 1 then
+    vim.cmd(vim.api.nvim_tabpage_get_var(0, 'tmux_pane_zoom'))
+    vim.api.nvim_tabpage_del_var(0, 'tmux_pane_zoom')
+  end
+end
+
 M.next_layout = function ()
   return fn.nested(2, function ()
+    restore_zoom()
     vim.cmd('wincmd =')
   end)
 end
@@ -42,6 +50,7 @@ M.rotate_window = function (opts)
     if type(key) == 'number' then
       if value == 'U' then
         return fn.nested(2, function ()
+          restore_zoom()
           vim.cmd('wincmd R')
         end)
       end
@@ -49,6 +58,7 @@ M.rotate_window = function (opts)
   end
 
   return fn.nested(2, function ()
+    restore_zoom()
     vim.cmd('wincmd r')
   end)
 end
@@ -115,10 +125,12 @@ M.split_window = function (opts)
     if type(key) == 'number' then
       if value == 'h' then
         return fn.nested(2, function ()
+          restore_zoom()
           vim.cmd('split | terminal')
         end)
       elseif value == 'v' then
         return fn.nested(2, function ()
+          restore_zoom()
           vim.cmd('vsplit | terminal')
         end)
       end
@@ -228,6 +240,7 @@ M.select_pane = function (opts)
 
   if opts.t == ':.+' then
     return fn.nested(2, function ()
+      restore_zoom()
       vim.cmd('wincmd w')
     end)
   end
@@ -236,18 +249,22 @@ M.select_pane = function (opts)
     if type(key) == 'number' then
       if value == 'L' then
         return fn.nested(2, function ()
+          restore_zoom()
           vim.cmd('wincmd h')
         end)
       elseif value == 'D' then
         return fn.nested(2, function ()
+          restore_zoom()
           vim.cmd('wincmd j')
         end)
       elseif value == 'U' then
         return fn.nested(2, function ()
+          restore_zoom()
           vim.cmd('wincmd k')
         end)
       elseif value == 'R' then
         return fn.nested(2, function ()
+          restore_zoom()
           vim.cmd('wincmd l')
         end)
       end
@@ -313,6 +330,7 @@ M.swap_pane = function (opts)
     local tgt = target()
 
     if src ~= tgt then
+      restore_zoom()
       vim.cmd(tgt..'wincmd w')
       local target_buffer = vim.fn.bufnr()
       vim.cmd(src..'wincmd w')
@@ -344,6 +362,26 @@ M.resize_pane = function (opts)
     sign = ''
   end
 
+  local toggle_zoom = false
+  for key, value in pairs(opts) do
+    if type(key) == 'number' then
+      if value == 'Z' then
+        toggle_zoom = true
+      end
+    end
+  end
+
+  if toggle_zoom then
+    return fn.nested(2, function (P)
+      if vim.fn.exists('t:tmux_pane_zoom') == 1 then
+        restore_zoom()
+      elseif vim.fn.winnr('$') > 1 then
+        vim.api.nvim_tabpage_set_var(0, 'tmux_pane_zoom', vim.fn.winrestcmd())
+        vim.cmd('vertical resize | resize')
+      end
+    end)
+  end
+
   table.insert(expression, 'resize')
 
   if value ~= 0 then
@@ -352,6 +390,7 @@ M.resize_pane = function (opts)
 
   local command = table.concat(expression, ' ')
   return fn.nested(2, function ()
+    restore_zoom()
     vim.cmd(command)
   end)
 end
@@ -373,6 +412,7 @@ M.kill_pane = function (opts)
       end
     end
 
+    restore_zoom()
     if has_windows then
       vim.cmd([[exe 'bdelete! '..expand('<abuf>')]])
     elseif has_tabs then
