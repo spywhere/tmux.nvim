@@ -332,7 +332,7 @@ M.resize_pane = function (opts)
   opts = opts or {}
 
   local sign = '+'
-  local value = opts.L or opts.R or opts.x or opts.y or 0
+  local value = opts.L or opts.R or opts.x or opts.y or 1
   local expression = {}
 
   if opts.L or opts.R or opts.x then
