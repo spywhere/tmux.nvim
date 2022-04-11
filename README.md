@@ -34,7 +34,7 @@ This are non exhaustive list of features available
 
 1: Partially implemented  
 2: This requires Neovim to implement a server / client architecture which
-planned in 0.7
+planned in [neovim#10071](https://github.com/neovim/neovim/pull/10071)
 
 ## Getting Started
 
