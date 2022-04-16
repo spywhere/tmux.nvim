@@ -9,6 +9,26 @@ local function restore_zoom()
   end
 end
 
+M.display_message = function (opts)
+  opts = opts or {}
+
+  local message = ''
+  for key, value in pairs(opts) do
+    if type(key) == 'number' then
+      message = value
+    end
+  end
+
+  return fn.nested(2, function ()
+    if message == '' then
+      return
+    end
+
+    print(message)
+  end)
+end
+M.display = M.display_message
+
 M.next_layout = function ()
   return fn.nested(2, function ()
     restore_zoom()
@@ -82,9 +102,11 @@ M.last_window = function ()
     if
       P.last.tabpage ~= nil and
       P.last.tabpage <= #vim.api.nvim_list_tabpages()
-      then
-        vim.cmd('tabnext ' .. P.last.tabpage)
-      end
+    then
+      vim.cmd('tabnext ' .. P.last.tabpage)
+    else
+      M.display_message({ 'No last window' })(P)()
+    end
   end)
 end
 M.last = M.last_window
@@ -276,9 +298,11 @@ end
 M.breakp = M.break_pane
 
 M.last_pane = function ()
-  return fn.nested(2, function ()
+  return fn.nested(2, function (P)
     local winid = vim.fn.winnr('#')
-    if winid ~= 0 then
+    if winid == 0 then
+      M.display_message({ 'No last pane' })(P)()
+    else
       vim.cmd(winid..'wincmd w')
     end
   end)
