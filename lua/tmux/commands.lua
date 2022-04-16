@@ -275,6 +275,16 @@ M.break_pane = function (opts)
 end
 M.breakp = M.break_pane
 
+M.last_pane = function ()
+  return fn.nested(2, function ()
+    local winid = vim.fn.winnr('#')
+    if winid ~= 0 then
+      vim.cmd(winid..'wincmd w')
+    end
+  end)
+end
+M.lastp = M.last_pane
+
 M.select_pane = function (opts)
   opts = opts or {}
 
