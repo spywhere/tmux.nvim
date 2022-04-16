@@ -30,7 +30,7 @@ return fn.nested(2, function (P, M)
       cmds.select_window { t = idx - 1 }
     )
   end
-  M.bind(';', cmds.select_window { 'l' } )
+  M.bind('l', cmds.select_window { 'l' } )
 
   -- pane management
   M.bind('!', cmds.break_pane {} )
