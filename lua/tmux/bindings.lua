@@ -33,6 +33,7 @@ return fn.nested(2, function (P, M)
   M.bind(';', cmds.select_window { 'l' } )
 
   -- pane management
+  M.bind('!', cmds.break_pane {} )
   M.bind('x', cmds.confirm_before {
     p = function ()
       return string.format('kill pane %s? (y/n)', vim.fn.winnr())

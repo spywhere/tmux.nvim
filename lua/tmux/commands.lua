@@ -235,6 +235,45 @@ M.send_prefix = function ()
   end)
 end
 
+M.break_pane = function (opts)
+  opts = opts or {}
+
+  local source = function ()
+    if opts.s ~= nil then
+      return opts.s
+    else
+      return vim.fn.winnr()
+    end
+  end
+
+  local keep_active = false
+
+  for key, value in pairs(opts) do
+    if type(key) == 'number' then
+      if value == 'd' then
+        keep_active = true
+      end
+    end
+  end
+
+  return fn.nested(2, function (P)
+    if vim.fn.winnr('$') == 1 then
+      return
+    end
+
+    local current_tab = vim.fn.tabpagenr()
+    local src = source()
+
+    restore_zoom()
+    vim.cmd(src..'wincmd w')
+    vim.cmd('wincmd T')
+    if keep_active then
+      vim.cmd('tabnext ' .. current_tab)
+    end
+  end)
+end
+M.breakp = M.break_pane
+
 M.select_pane = function (opts)
   opts = opts or {}
 
