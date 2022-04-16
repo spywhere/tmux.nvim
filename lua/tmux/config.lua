@@ -21,6 +21,8 @@ return fn.nested(2, function (P)
 
   vim.opt.fillchars:append('eob: ')
 
+  vim.o.termguicolors = true
+
   -- no command line
   --   currently not possible
   --   ref: https://github.com/neovim/neovim/issues/1004
