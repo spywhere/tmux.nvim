@@ -77,6 +77,18 @@ M.next_window = function ()
 end
 M.next = M.next_window
 
+M.last_window = function ()
+  return fn.nested(2, function (P)
+    if
+      P.last.tabpage ~= nil and
+      P.last.tabpage <= #vim.api.nvim_list_tabpages()
+      then
+        vim.cmd('tabnext ' .. P.last.tabpage)
+      end
+  end)
+end
+M.last = M.last_window
+
 M.select_window = function (opts)
   opts = opts or {}
 
@@ -95,22 +107,11 @@ M.select_window = function (opts)
   for key, value in pairs(opts) do
     if type(key) == 'number' then
       if value == 'l' then
-        return fn.nested(2, function (P)
-          if
-            P.last.tabpage ~= nil and
-            P.last.tabpage <= #vim.api.nvim_list_tabpages()
-          then
-            vim.cmd('tabnext ' .. P.last.tabpage)
-          end
-        end)
+        return M.last_window()
       elseif value == 'n' then
-        return fn.nested(2, function ()
-          vim.cmd('tabnext +1')
-        end)
+        return M.next_window()
       elseif value == 'p' then
-        return fn.nested(2, function ()
-          vim.cmd('tabnext -1')
-        end)
+        return M.previous_window()
       end
     end
   end
