@@ -1,37 +1,77 @@
 -- plugins will be installed to the cache directory
-plugin_home = vim.fn.stdpath('cache') .. '/tmux.nvim'
-vim_plug_url = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-vim_plug = plugin_home .. '/plug.vim'
+local plugin_home = vim.fn.stdpath('cache') .. '/tmux.nvim'
+local config_home = vim.fn.stdpath('config')
+local plug_path = config_home .. '/lua/plug.lua'
+local plug_url = 'https://raw.githubusercontent.com/spywhere/plug.nvim/main/plug.lua'
 
--- install vim-plug automatically if needed
-if vim.fn.filereadable(vim_plug) == 0 then
+if vim.fn.filereadable(vim.fn.expand(plug_path)) == 0 then
+  if vim.fn.executable('curl') == 0 then
+    -- curl not installed, skip the config
+    print('cannot install plug.nvim, curl is not installed')
+    return
+  end
   vim.cmd(
-  'silent !curl -fLo ' .. vim_plug .. ' --create-dirs ' .. vim_plug_url
+    'silent !curl -fLo ' .. plug_path .. ' --create-dirs ' .. plug_url
   )
 end
+
 vim.opt.runtimepath:append(plugin_home)
 
-vim.fn['plug#begin'](plugin_home)
-vim.fn['plug#']('spywhere/tmux.nvim')
-vim.fn['plug#end']()
+local plug = require('plug')
 
 -- install or update plugins as needed
-if vim.fn.isdirectory(plugin_home .. '/tmux.nvim') == 0 then
-  vim.cmd('PlugInstall --sync | q')
-else
-  vim.cmd('PlugUpdate --sync | q')
+local install_or_update = function ()
+  local has_plugin = function ()
+    return vim.fn.isdirectory(plugin_home .. '/tmux.nvim') == 1
+  end
+  local install = function ()
+    vim.cmd('PlugInstall --sync | q')
+  end
+  local update = function ()
+    vim.cmd('PlugUpdate --sync | q')
+  end
+
+  return function (hook)
+    hook('post_setup', function ()
+      if has_plugin() then
+        update()
+      else
+        install()
+      end
+    end)
+  end
 end
 
-local tmux = require('tmux')
-local cmds = require('tmux.commands')
+plug.setup {
+  plugin_dir = plugin_home,
+  extensions = {
+    -- also perform automatic installation for vim-plug and missing plugins
+    plug.extension.auto_install {
+      -- do not automatically install plugins, we will do that ourselves
+      missing = false
+    },
+    install_or_update {},
+    plug.extension.config {}
+  }
+}
 
--- some configurations go here
+{
+  'spywhere/tmux.nvim',
+  config = function ()
+    local tmux = require('tmux')
+    local cmds = require('tmux.commands')
 
--- may be changing the default prefix key?
---   tmux.prefix('<C-a>')
+    -- some configurations go here
 
--- may be binding a new key?
---   tmux.bind('|', cmds.split_window { 'v' } )
---   tmux.bind('-', cmds.split_window { 'h' } )
+    -- may be changing the default prefix key?
+    --   tmux.prefix('<C-a>')
 
-tmux.start() -- this will start a terminal session
+    -- may be binding a new key?
+    --   tmux.bind('|', cmds.split_window { 'v' } )
+    --   tmux.bind('-', cmds.split_window { 'h' } )
+
+    tmux.start() -- this will start a terminal session
+  end
+}
+
+''
