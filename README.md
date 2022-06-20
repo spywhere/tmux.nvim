@@ -19,6 +19,7 @@ only for terminal multiplexing
 * [Configurations](#configurations)
 * [Installation](#installation)
 * [Integration](#integration)
+* [Supported Features](#supported-features)
 * [Contributes](#contributes)
 * [License](#license)
 
@@ -100,6 +101,18 @@ then, when you're ready to use Neovim as terminal multiplexer, just run
 ```sh
 nvim -u ~/.tmux.nvim/init.lua
 ```
+
+## Supported Features
+
+These are a list of features that required a certain version of Neovim
+
+Neovim 0.7 or later is required for
+
+- Status line on the bottom (above command line)
+
+Neovim 0.5 or later is required for
+
+- Basic functionality
 
 ## Contributes
 
