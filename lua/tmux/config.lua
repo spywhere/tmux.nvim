@@ -36,4 +36,34 @@ return fn.nested(2, function (P)
   vim.o.splitbelow = true
 
   vim.o.mouse = 'a'
+
+  local disable_plugins = {
+    '2html_plugin',
+    'getscript',
+    'getscriptPlugin',
+    'gzip',
+    'logipat',
+    'man',
+    'matchit',
+    'matchparen',
+    'netrw',
+    'netrwFileHandlers',
+    'netrwPlugin',
+    'netrwSettings',
+    'remote_plugins',
+    'rrhelper',
+    'shada_plugin',
+    'spellfile_plugin',
+    'tar',
+    'tarPlugin',
+    'tutor_mode_plugin',
+    'vimball',
+    'vimballPlugin',
+    'zip',
+    'zipPlugin'
+  }
+
+  for _, plugin in pairs(disable_plugins) do
+    vim.g['loaded_' .. plugin] = 1
+  end
 end)
