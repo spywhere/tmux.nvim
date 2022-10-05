@@ -9,6 +9,10 @@ local is_zoom = function (tid)
 end
 
 local functions = function (P)
+  local gettid = function (tid)
+    return tid or vim.fn.tabpagenr()
+  end
+
   return {
     pid = function ()
       return vim.fn.getpid()
@@ -20,7 +24,11 @@ local functions = function (P)
     host = function ()
       return vim.trim(vim.fn.hostname())
     end,
+    pane_id = function (_, tid)
+      return vim.fn.tabpagewinnr(gettid(tid))
+    end,
     window_flags = function (_, tid)
+      tid = gettid(tid)
       local flags = ' '
 
       if tid == vim.fn.tabpagenr() then
@@ -39,13 +47,13 @@ local functions = function (P)
       return flags
     end,
     window_id = function (_, tid)
-      return vim.fn.tabpagewinnr(tid or vim.fn.tabpagenr())
+      return gettid(tid)
     end,
     window_index = function (_, tid)
-      return (tid or vim.fn.tabpagenr()) - P.index_offset
+      return gettid(tid) - P.index_offset
     end,
     window_name = function (_, tid)
-      tid = tid or vim.fn.tabpagenr()
+      tid = gettid(tid)
 
       local buffers = vim.fn.tabpagebuflist(tid)
       local winid = vim.fn.tabpagewinnr(tid)
@@ -63,6 +71,19 @@ local functions = function (P)
       return vim.fn.fnamemodify(
         vim.api.nvim_buf_get_var(bufid, 'term_title'),
         ':t'
+      )
+    end,
+    window_zoomed_flag = function (_, tid)
+      return is_zoom(gettid(tid)) and 1 or 0, '%d'
+    end,
+    version = function ()
+      local version = vim.version()
+      return string.format(
+        '%s.%s.%s%s',
+        version.major,
+        version.minor,
+        version.patch,
+        version.prerelease and '-dev' or ''
       )
     end,
     t = function (format)
