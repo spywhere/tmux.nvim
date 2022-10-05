@@ -1,6 +1,6 @@
 # tmux.nvim
 
-_This plugin still under development_
+**Note: This 0.5.0 branch is for migration purpose only so the code will not be maintained**
 
 This plugin provides a framework to turns
 [Neovim](https://github.com/neovim/neovim) into terminal multiplexer
@@ -63,6 +63,8 @@ Please note that some options are opinionated and will be updated to match
 tmux's defaults later on
 
 ## Installation
+
+Requires neovim v0.5.0 or later
 
 It is highly recommended to clone the repository (or download a zip file) and
 place it somewhere (`~/.tmux.nvim` would work too)
