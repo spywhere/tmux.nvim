@@ -7,7 +7,12 @@ local P = { -- private methods
     tabpage = nil
   },
   status = {
-    position = vim.fn.has('nvim-0.7') == 0 and 'top' or 'bottom'
+    position = vim.fn.has('nvim-0.7') == 0 and 'top' or 'bottom',
+    left = '[{session_name}] ',
+    right = '"{host}" {t:%H:%M %d-%b-%y}',
+    format = '{window_index}:{window_name}{window_flags}',
+    current_format = '{window_index}:{window_name}{window_flags}',
+    separator = ' '
   },
   mark = {
     tabpage = nil,
