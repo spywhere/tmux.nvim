@@ -1,5 +1,3 @@
-local logger = require('tmux.lib.logger')
-local _registry = 'tmux.lib.registry'
 local std = {}
 std.count = function ()
   local i = 0
@@ -20,33 +18,9 @@ _fn = {}
 local M = {}
 
 local _group = nil
-local _plugins = {}
-local _pre = {}
-local _post = {}
-local _defers = {}
-local _callbacks = {}
-local _experiments = {}
 local increment = std.count()
 
-local remove = function (index, group_name)
-  local clear = 'autocmd! ' .. group_name
-  _callbacks[index] = nil
-  vim.api.nvim_command(clear)
-end
-
-M._call = function (index, group_name, ...)
-  local kill = function ()
-    remove(index, group_name)
-  end
-  _callbacks[index](M, kill, ...)
-end
-
 M.group = function (group_name, group_fn)
-  if _group then
-    logger.error('still defining autogroup \'' .. _group.name .. '\'')
-    return
-  end
-
   local name = group_name
   local group = group_fn
   if group then
@@ -60,16 +34,11 @@ M.group = function (group_name, group_fn)
     group = name
     name = nil
   end
-  _group = {
-    name = name or increment()
-  }
-  _group.expression = {
-    'augroup ' .. _group.name,
-    'autocmd!'
-  }
+  _group = vim.api.nvim_create_augroup(
+    name or string.format('_lua_%s', increment()),
+    {}
+  )
   group()
-  table.insert(_group.expression, 'augroup END')
-  vim.api.nvim_exec(table.concat(_group.expression, '\n'), false)
   _group = nil
 end
 
@@ -83,41 +52,18 @@ M.auto = function (_events, func, _filter, _modifiers)
     return
   end
 
-  local evnts = std.wrap(_events)
-  for event in ipairs(evnts) do
+  local events = std.wrap(_events)
+  for event in ipairs(events) do
     assert(vim.fn.exists('##' .. event))
   end
 
-  local index = increment()
-  local events = table.concat(evnts, ',')
-  local filter = table.concat(std.wrap(_filter or '*'), ',')
-  local modifiers = table.concat(std.wrap(_modifiers or {}), ' ')
-  local call_args = {
-    index,
-    string.format('%q', _group.name)
-  }
-  local fn_call = {
-    'lua require(\'' .. _registry ..'\')',
-    '_call(' .. table.concat(call_args, ', ') .. ')'
-  }
-  if type(func) == 'string' then
-    fn_call = { func }
-  else
-    _callbacks[index] = func
-  end
+  local filter = std.wrap(_filter or '*')
 
-  local expression = {
-    'autocmd',
-    events,
-    filter,
-    modifiers,
-    table.concat(fn_call, '.')
-  }
-  table.insert(_group.expression, table.concat(expression, ' '))
-
-  return function ()
-    remove(index, _group.name)
-  end
+  vim.api.nvim_create_autocmd(events, {
+    group = _group,
+    pattern = filter,
+    callback = func
+  })
 end
 
 M.call_for_fn = function (func, args)

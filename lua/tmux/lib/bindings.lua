@@ -1,66 +1,4 @@
-local _bindings = 'tmux.lib.bindings'
-local std = {}
-std.count = function ()
-  local i = 0
-  return function ()
-    i = i + 1
-    return i
-  end
-end
-
 local M = {}
-
-local increment = std.count()
-
-local _callbacks = {}
-
-M._cmd = function (index, args, ...)
-  local modifiers = {...}
-  modifiers.args = args
-  return function (...)
-    _callbacks[index](modifiers, ...)
-  end
-end
-
-M._call = function (index, ...)
-  _callbacks[index](M, ...)
-end
-
-M.cmd = function (name, command)
-  assert(command[1], 'command \'' .. name ..'\' definition is required')
-  assert(
-    type(command[1]) == 'function',
-    'command \'' .. name .. '\' expect function as first argument'
-  )
-  local index = increment()
-  _callbacks[index] = command[1]
-  local definition = { 'command!' }
-  local command_args = { index, '<q-args>' }
-  for k, v in pairs(command) do
-    if type(k) == 'string' and type(v) == 'boolean' and v then
-      table.insert(definition, '-' .. k)
-      local escape_arg = ({
-        bang = '\'<bang>\'',
-        count = '\'<count>\''
-      })[k]
-      if escape_arg then
-        table.insert(command_args, escape_arg)
-      end
-    elseif type(k) == 'number' and type(v) == 'string' and v:match('^%-') then
-      table.insert(definition, v)
-    end
-  end
-  table.insert(definition, name)
-
-  local expression = {
-    'lua require(\'' .. _bindings ..'\')',
-    '_cmd('.. table.concat(command_args, ',') .. ')(<f-args>)'
-  }
-
-  table.insert(definition, table.concat(expression, '.'))
-
-  vim.api.nvim_command(table.concat(definition, ' '))
-end
 
 local build_lua_map_ops = function (tbl)
   local sep = ' '
@@ -90,12 +28,8 @@ local map = function (mapper)
       )
 
       if type(ops) == 'function' then
-        local index = increment()
-        _callbacks[index] = ops
-        ops = {
-          import = _bindings,
-          '_call(' .. index .. ')'
-        }
+        options.callback = ops
+        ops = ''
       end
 
       if type(ops) == 'table' then
