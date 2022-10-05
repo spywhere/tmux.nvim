@@ -62,7 +62,8 @@ M.auto = function (_events, func, _filter, _modifiers)
   vim.api.nvim_create_autocmd(events, {
     group = _group,
     pattern = filter,
-    callback = func
+    callback = type(func) == 'function' and func or nil,
+    command = type(func) == 'string' and func or nil
   })
 end
 

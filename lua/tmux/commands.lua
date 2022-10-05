@@ -352,7 +352,7 @@ M.selectp = M.select_pane
 M.swap_pane = function (opts)
   opts = opts or {}
 
-  local source = function ()
+  local source = function (P)
     if opts.s ~= nil then
       return opts.s
     elseif P.mark.win == nil then
@@ -399,7 +399,7 @@ M.swap_pane = function (opts)
   end
 
   return fn.nested(2, function (P)
-    local src = source()
+    local src = source(P)
     if op ~= nil then
       op()
     end
@@ -420,7 +420,7 @@ M.swap_pane = function (opts)
     end
   end)
 end
-M.swapp = swap_pane
+M.swapp = M.swap_pane
 
 M.resize_pane = function (opts)
   opts = opts or {}
