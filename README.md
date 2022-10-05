@@ -2,6 +2,8 @@
 
 _This plugin still under development_
 
+![tmux.nvim](https://user-images.githubusercontent.com/1087399/194050442-dedeea40-5c34-4a75-b292-d694a151385c.png)
+
 This plugin provides a framework to turns
 [Neovim](https://github.com/neovim/neovim) into terminal multiplexer
 (heavily based on [tmux](https://github.com/tmux/tmux))
