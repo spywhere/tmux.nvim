@@ -7,7 +7,7 @@ local P = { -- private methods
     tabpage = nil
   },
   status = {
-    position = 'top'
+    position = vim.fn.has('nvim-0.7') == 0 and 'top' or 'bottom'
   },
   mark = {
     tabpage = nil,

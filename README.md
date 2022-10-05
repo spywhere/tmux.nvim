@@ -106,6 +106,10 @@ nvim -u ~/.tmux.nvim/init.lua
 
 These are a list of features that required a certain version of Neovim
 
+Neovim 0.8 or later is required for
+
+- Cleaner status line (hide the command line)
+
 Neovim 0.7 or later is required for
 
 - Status line on the bottom (above command line)

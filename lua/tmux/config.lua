@@ -23,12 +23,9 @@ return fn.nested(2, function (P)
 
   vim.o.termguicolors = true
 
-  -- no command line
-  --   currently not possible
-  --   ref: https://github.com/neovim/neovim/issues/1004
-  -- vim.o.cmdheight = 0
-  -- workaround for hiding command line
-  -- vim.opt.lines:append(1)
+  if vim.fn.has('nvim-0.8') == 1 then
+    vim.o.cmdheight = 0
+  end
 
   -- remove command line clutter
   vim.o.showmode = false
