@@ -81,7 +81,6 @@ git clone https://github.com/spywhere/tmux.nvim ~/.tmux.nvim
 or install using a plugin manager of your choice, for example:
 
 ```viml
-" neovim 0.5 or later that supports lua
 Plug 'spywhere/tmux.nvim'
 ```
 
