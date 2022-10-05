@@ -7,7 +7,7 @@ local plug_url = 'https://raw.githubusercontent.com/spywhere/plug.nvim/main/plug
 if vim.fn.filereadable(vim.fn.expand(plug_path)) == 0 then
   if vim.fn.executable('curl') == 0 then
     -- curl not installed, skip the config
-    print('cannot install plug.nvim, curl is not installed')
+    vim.notify('cannot install plug.nvim, curl is not installed', vim.log.levels.ERROR)
     return
   end
   vim.cmd(

@@ -24,7 +24,7 @@ M.display_message = function (opts)
       return
     end
 
-    print(message)
+    vim.notify(message, vim.log.levels.INFO)
   end)
 end
 M.display = M.display_message

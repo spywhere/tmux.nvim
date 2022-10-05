@@ -60,18 +60,18 @@ M.bind = function (key, fn, opts)
   opts = opts or {}
   local keymap = key
 
-  local is_repeat = false
+  local is_repeat = false -- TODO: support repeated
   local key_table = ''
   local mode = 'terminal'
 
-  for key, value in pairs(opts) do
-    if type(key) == 'number' then
+  for index, value in pairs(opts) do
+    if type(index) == 'number' then
       if value == 'r' then
         is_repeat = true
       elseif value == 'n' then
         key_table = 'root'
       end
-    elseif key == 'T' then
+    elseif index == 'T' then
       key_table = value
     end
   end
@@ -94,6 +94,14 @@ M.on_ready = function (callback)
 end
 
 M.start = function (opts)
+  if vim.fn.has('nvim-0.7.0') == 0 then
+    vim.notify(
+      'tmux.nvim requires neovim v0.7.0 or later',
+      vim.log.levels.ERROR
+    )
+    return
+  end
+
   opts = opts or {}
 
   for _, callback in ipairs(P.ready) do
