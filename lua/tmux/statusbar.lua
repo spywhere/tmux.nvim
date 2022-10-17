@@ -24,6 +24,15 @@ local functions = function (P)
     host = function ()
       return vim.trim(vim.fn.hostname())
     end,
+    host_short = function ()
+      local hostname = vim.trim(vim.fn.hostname())
+      local index = string.find(hostname, '.', nil, true)
+      if index then
+        return string.sub(hostname, 1, index)
+      else
+        return hostname
+      end
+    end,
     pane_id = function (_, tid)
       return vim.fn.tabpagewinnr(gettid(tid))
     end,
