@@ -97,8 +97,16 @@ Create a file named `init.lua` and place it somewhere
 vim.opt.rtp:append('~/.tmux.nvim')
 
 local tmux = require('tmux')
+local cmds = require('tmux.commands')
 
 -- some configurations go here
+
+-- may be changing the default prefix key?
+--   tmux.prefix('<C-a>')
+
+-- may be binding a new key?
+--   tmux.bind('|', cmds.split_window { 'v' } )
+--   tmux.bind('-', cmds.split_window { 'h' } )
 
 tmux.start() -- this will start a terminal session
 
@@ -109,6 +117,8 @@ then, when you're ready to use Neovim as terminal multiplexer, just run
 ```sh
 nvim -u ~/.tmux.nvim/init.lua
 ```
+
+Check out [bindings.lua](/lua/tmux/bindings.lua) for how tmux.nvim set a default key bindings
 
 ## Supported Features
 
