@@ -18,19 +18,20 @@ M.partial = function (size, callback)
 end
 
 M.nested = function (count, callback)
-  local function recurse(...)
+  local function recurse(time, ...)
     local args = {...}
-    count = count - 1
-    if count > 0 then
+    if time < count then
       return function (...)
-        return recurse(unpack(args), ...)
+        return recurse(time + 1, unpack(args), ...)
       end
     elseif callback then
       return callback(unpack(args))
     end
   end
 
-  return recurse
+  return function (...)
+    return recurse(1, ...)
+  end
 end
 
 return M
