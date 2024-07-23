@@ -1,0 +1,10 @@
+{
+  "runtime": {
+    "version": "LuaJIT"
+  },
+  "diagnostics": {
+    "disable": ["redefined-local", "redundant-parameter"],
+    "globals": ["vim"]
+  },
+  "workspace.checkThirdParty": false
+}
