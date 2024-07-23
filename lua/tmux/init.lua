@@ -54,9 +54,10 @@ P.confirm = function (...)
 end
 
 P.setup = function ()
-  M.on_ready(require('tmux.config')(P))
+  require('tmux.config')(P)(M)
+  require('tmux.bindings')(P)(M)
+
   M.on_ready(require('tmux.statusbar')(P))
-  M.on_ready(require('tmux.bindings')(P))
   M.on_ready(require('tmux.event')(P))
   return M
 end
@@ -92,6 +93,9 @@ end
 
 M.prefix = function (key)
   P.prefix = key
+  -- possible key map pollusion
+  --   might be a good idea to clean up the previous one first
+  require('tmux.bindings')(P)(M)
 end
 
 M.on_ready = function (callback)
