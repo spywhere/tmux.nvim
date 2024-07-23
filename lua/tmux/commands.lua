@@ -474,31 +474,43 @@ M.resizep = M.resize_pane
 
 M.kill_pane = function (opts)
   return fn.nested(2, function (P)
-    local has_tabs = vim.fn.tabpagenr('$') > 1
-    local has_windows = false
+    local has_more_tabs = vim.fn.tabpagenr('$') > 1
 
     local current_buffer = vim.api.nvim_get_current_buf()
     local wins = vim.api.nvim_list_wins()
+
+    local has_more_panes = false
     for _, win in ipairs(wins) do
       local buffer = vim.api.nvim_win_get_buf(win)
-      local buffer_type = vim.api.nvim_buf_get_option(buffer, 'buftype')
-      if current_buffer ~= buffer and buffer_type == 'terminal' then
-        has_windows = true
+      local buftype = vim.api.nvim_buf_get_option(buffer, 'buftype')
+      if (P.last.status == 0 or buffer ~= current_buffer) and buftype == 'terminal' then
+        has_more_panes = true
         break
       end
     end
 
     restore_zoom()
-    if has_windows then
+
+    if has_more_panes and P.last.status ~= 0 then
       vim.cmd([[exe 'bdelete! '..expand('<abuf>')]])
-    elseif has_tabs then
-      vim.cmd('quit!')
-    elseif P.last.status == -1 then
-      -- terminal is killed
-      vim.cmd('cquit! 1')
-    else
-      vim.cmd('cquit! ' .. P.last.status)
+
+      vim.defer_fn(function ()
+        if vim.bo.buftype == 'terminal' then
+          vim.cmd('startinsert!')
+        end
+      end, 10)
+    elseif not has_more_panes and has_more_tabs then
+      vim.cmd('tabclose!')
+    elseif not has_more_panes and not has_more_tabs then
+      if P.last.status == -1 then
+        -- terminal is killed
+        vim.cmd('cquit! 1')
+      else
+        vim.cmd('cquit! ' .. P.last.status)
+      end
     end
+
+    P.last.status = -1
   end)
 end
 M.kill_p = M.kill_pane

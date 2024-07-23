@@ -3,7 +3,7 @@ local registry = require('tmux.lib.registry')
 
 local P = { -- private methods
   last = {
-    status = 0,
+    status = -1,
     tabpage = nil
   },
   status = {

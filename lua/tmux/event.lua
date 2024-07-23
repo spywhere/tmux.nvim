@@ -5,7 +5,6 @@ local cmds = require('tmux.commands')
 return fn.nested(2, function (P, M)
   local function start_insert()
     vim.defer_fn(function ()
-      P.last.status = -1
       if vim.bo.buftype == 'terminal' then
         vim.cmd('startinsert!')
       end
@@ -34,9 +33,7 @@ return fn.nested(2, function (P, M)
 
     -- if terminal was not killed
     if P.last.status ~= -1 then
-      vim.defer_fn(function ()
-        cmds.kill_pane({})(P)(M)
-      end, 10)
+      cmds.kill_pane({})(P)(M)
     end
   end
 
